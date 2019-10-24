@@ -4,7 +4,7 @@
 struct cuentaHabiente
 {
   char Nombre[100];
-  char No_Cuenta[17];
+  long long No_Cuenta;
   int NIP;
   int Sucursal;
   int T_Cuenta;
@@ -31,13 +31,13 @@ main ()
   struct FilaDeBanco *unaFila = NULL;
 
   struct cuentaHabiente persona =
-    { "UnaPersona", "1234567891234567", 1245, 8, 2 };
+    { "UnaPersona", 1234567891234567, 1245, 8, 2 };
   struct cuentaHabiente persona1 =
-    { "Una Persona1", "0234567891234567", 1234, 7, 1 };
+    { "Una Persona1", 2234567891234567, 1234, 7, 1 };
   struct cuentaHabiente persona2 =
-    { "Una Persona2", "1244567891234567", 1234, 7, 1 };
+    { "Una Persona2", 1244567891234567, 1234, 7, 1 };
   struct cuentaHabiente persona3 =
-    { "Una Persona3", "1234667891234567", 1234, 7, 1 };
+    { "Una Persona3", 1234667891234567, 1234, 7, 1 };
 
   unaFila = formarFila (unaFila, persona);
   unaFila = formarFila (unaFila, persona1);
