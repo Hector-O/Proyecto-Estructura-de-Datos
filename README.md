@@ -18,7 +18,7 @@ y está dada con respecto a los siguientes datos del usuario:
 - Sucursal
 - Tipo de cuenta
 
-Cada uno de estos datos se procesan con una función hash, la cual otorga una posición en la base de datos del banco, 
+Cada uno de estos datos se guardarán en un árbol binario de búsqueda, lo que permite tener la cuenta del usuario la base de datos del banco permitiendo que la búsqueda del la cuenta del usuario sea la más rápida posilbe.
 lugar donde se almacenará la cantidad monetaria del usuario en ese momento; 
 Dado a que existen diferentes usuarios en el banco, los cuales solicitan los servicios casi simultáneamente, 
 estos serán atendidos con prioridad respecto de cómo fueron llegando, es decir, en una cola o fila.
