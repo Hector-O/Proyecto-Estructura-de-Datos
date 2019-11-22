@@ -6,7 +6,7 @@ insertarArbol (struct arbolDeBanco *raiz, struct cuentaHabiente persona)
   if (raiz == NULL)
     {
       struct arbolDeBanco *nuevo =
-	(struct arbolDeBanco *) malloc (sizeof (struct arbolDeBanco));
+  (struct arbolDeBanco *) malloc (sizeof (struct arbolDeBanco));
       nuevo->persona = persona;
       nuevo->izq = NULL;
       nuevo->der = NULL;
@@ -34,7 +34,7 @@ mostrarArbol (struct arbolDeBanco *raiz)
     {
       return;
     }
-  printf("\t%s\n",raiz->persona.Nombre);// puts(raiz->persona.Nombre);
+  puts (raiz->persona.Nombre);
   mostrarArbol (raiz->izq);
   mostrarArbol (raiz->der);
 }
@@ -71,16 +71,17 @@ buscarArbol (struct arbolDeBanco *raiz, struct cuentaHabiente persona)
     }
 }
 
-
 void
 consultarArbol (struct arbolDeBanco *raiz, struct cuentaHabiente persona)
 {
   struct arbolDeBanco *buscado = buscarArbol (raiz, persona);
-  printf ("\tNombre del Titular: ");
+  printf ("No de Sucursal: %d\t\t", buscado->persona.Sucursal);
+  printf ("Tipo de cuenta: %d\n", buscado->persona.T_Cuenta);
+
+  printf ("Nombre del Titular: ");
   puts (buscado->persona.Nombre);
-  printf ("\tNo de Sucursal: %d\t\t", buscado->persona.Sucursal);
-  printf ("\tTipo de cuenta: %d\n", buscado->persona.T_Cuenta);
-  printf ("\tNo. de cuenta: %lld\n", buscado->persona.No_Cuenta);
+
+  printf ("No. de cuenta: %lld\n", buscado->persona.No_Cuenta);
 
 }
 
@@ -115,7 +116,7 @@ padreDe (struct arbolDeBanco *raiz, struct cuentaHabiente persona)
 
   if ((raiz->izq != NULL && raiz->izq->persona.No_Cuenta == persona.No_Cuenta)
       || (raiz->der != NULL
-	  && raiz->der->persona.No_Cuenta == persona.No_Cuenta))
+    && raiz->der->persona.No_Cuenta == persona.No_Cuenta))
     {
       return raiz;
     }
@@ -142,67 +143,187 @@ padreDe (struct arbolDeBanco *raiz, struct cuentaHabiente persona)
   return NULL;
 
 }
-//// Implementacion de eliminacion de persona
-/*
-struct arbolDeBanco *ElimiarCuenta(struct arbolDeBanco *raiz,struct cuentaHabiente persona){
-  struct arbolDeBanco *nodo = NULL;
-  struct arbolDeBanco *padre = NULL;
-  struct arbolDeBanco *actual = NULL;
-  int aux = 0;
-  actual = raiz;
-  while(!Vacio(actual)) //Mientras la raiz no este vacia
-  {
-    if(persona == actual -> persona) //Se encontro el dato
+
+struct arbolDeBanco *
+mayorDe (struct arbolDeBanco *raiz)
+{
+  if (raiz == NULL)
     {
-      if(esHoja(actual)) //Si es hoja, solo se elimina
-      {
-        if(padre) //Si el pare existe, es decir, si no es raiz
-        {
-          //Eliminamos los punteros que señalan al actual
-          if(padre -> izq == actual)
-            padre -> izq = NULL;
-          else if(padre -> der == actual)
-            padre -> der = NULL;
-        }
-        //Si no existe el padre, y tampoco tiene hijos, solo es un nodo, asi que lo elimino
-        free(actual);
-        actual = NULL;
-      }
-      else
-      { //Si el nodo tiene hijos
-        padre = actual;
-        //A quien le dejamos los hijos? Al menor de los mayores (al más izquierdo de la rama derecha)
-        if(actual -> der) //Existe
-        {
-          nodo = actual -> der;
-          while(nodo -> izq){
-            padre = nodo;
-            nodo = nodo -> izq;
-          } //Llegammos el menor de los mayores
-        }
-        else //Si no tiene mayores, se lo damos al mayor de los menores
-        {
-          nodo = actual -> izq;
-          while(nodo -> der){
-            padre = nodo;
-            nodo = nodo -> der;
-          }
-        }
-      
-        //Hacemos cambio de posicion para asegurarnos que lo que se elimine es un nodo hoja
-        aux = actual -> persona;
-        actual -> persona = nodo -> persona;
-        nodo -> persona = aux;
-        actual = nodo;
-      }
-    } 
-    else //No se encontro, hay que seguir buscando
-    {
-      padre = actual;
-      if(persona > actual -> persona)
-        actual = actual -> der;
-      else if(persona < actual -> persona)
-        actual = actual -> izq;
+      return NULL;
     }
+
+  struct arbolDeBanco *mayor = NULL;
+
+  if (raiz->der != NULL)
+    {
+      mayor = mayorDe (raiz->der);
+    }
+  else
+    {
+      return raiz;
+    }
+  return mayor;
+}
+
+struct arbolDeBanco *
+menorDe (struct arbolDeBanco *raiz)
+{
+  if (raiz == NULL)
+    {
+      return NULL;
+    }
+
+  struct arbolDeBanco *menor = NULL;
+
+  if (raiz->izq != NULL)
+    {
+      menor = menorDe (raiz->izq);
+    }
+  else
+    {
+      return raiz;
+    }
+  return menor;
+}
+
+struct arbolDeBanco *
+eliminarRaizDeArbol (struct arbolDeBanco *raiz)
+{
+  if (raiz == NULL)
+    {
+      return NULL;
+    }
+
+  if (esHoja (raiz))
+    {
+      free (raiz);
+      return NULL;
+    }
+
+  struct arbolDeBanco *mayor = NULL;
+  mayor = mayorDe (raiz->izq);
+
+  if (mayor != NULL)
+    {
+
+      struct arbolDeBanco *padreDeMayor = NULL;
+      padreDeMayor = padreDe (raiz, mayor->persona);
+
+      if (esHoja (mayor))
+  {
+    if (raiz->izq->persona.No_Cuenta == mayor->persona.No_Cuenta)
+      {
+        mayor->der = raiz->der;
+        free (raiz);
+        return mayor;
+      }
+    else
+      {
+        padreDeMayor->der = mayor->izq;
+        mayor->izq = raiz->izq;
+        mayor->der = raiz->der;
+        free (raiz);
+        return mayor;
+      }
   }
-} */
+      else
+  {
+    if (raiz->izq->persona.No_Cuenta == mayor->persona.No_Cuenta)
+      {
+        mayor->der = raiz->der;
+        free (raiz);
+        return mayor;
+      }
+    else
+      {
+        padreDeMayor->der = mayor->izq;
+        mayor->der = raiz->der;
+        mayor->izq = raiz->izq;
+        free (raiz);
+        return mayor;
+      }
+  }
+    }
+
+  struct arbolDeBanco *menor = NULL;
+  menor = menorDe (raiz->der);
+
+  if (menor != NULL)
+    {
+      struct arbolDeBanco *padreDeMenor = NULL;
+      padreDeMenor = padreDe (raiz, menor->persona);
+
+      if (esHoja (menor))
+  {
+    if (raiz->der->persona.No_Cuenta == menor->persona.No_Cuenta)
+      {
+        menor->izq = raiz->izq;
+        free (raiz);
+        return menor;
+      }
+    else
+      {
+        padreDeMenor->izq = menor->der;
+        menor->izq = raiz->izq;
+        menor->der = raiz->der;
+        free (raiz);
+        return menor;
+      }
+  }
+      else
+  {
+    if (raiz->der->persona.No_Cuenta == menor->persona.No_Cuenta)
+      {
+        menor->izq = raiz->izq;
+        free (raiz);
+        return menor;
+      }
+    else
+      {
+        padreDeMenor->izq = menor->der;
+        menor->izq = raiz->izq;
+        menor->der = raiz->der;
+        free (raiz);
+        return menor;
+      }
+  }
+    }
+  return raiz;
+}
+
+
+struct arbolDeBanco *
+eliminarDeArbol (struct arbolDeBanco *raiz, struct cuentaHabiente persona)
+{
+  if (raiz == NULL)
+    {
+      return NULL;
+    }
+
+  if (raiz->persona.No_Cuenta == persona.No_Cuenta)
+    {
+     return eliminarRaizDeArbol(raiz);
+    }
+
+  struct arbolDeBanco *buscado = NULL;
+  buscado = buscarArbol (raiz, persona);
+  if (buscado == NULL)
+    return NULL;
+
+  struct arbolDeBanco *padreDeBuscado = NULL;
+  padreDeBuscado = padreDe (raiz, buscado->persona);
+  if(padreDeBuscado == NULL)
+    return NULL;
+  
+  if (padreDeBuscado->persona.No_Cuenta > buscado->persona.No_Cuenta)
+    {
+      padreDeBuscado->izq = eliminarRaizDeArbol(buscado);
+      return raiz;
+    }
+
+  if (padreDeBuscado->persona.No_Cuenta < buscado->persona.No_Cuenta)
+    {
+      padreDeBuscado->der = eliminarRaizDeArbol(buscado);
+      return raiz;
+    }
+}

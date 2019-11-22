@@ -1,7 +1,5 @@
 #ifndef __PROYECTO_H__
 #define __PROYECTO_H__
-
-
 #include<stdio.h>
 #include<stdlib.h>
 
@@ -24,12 +22,13 @@ struct arbolDeBanco
 
 struct arbolDeBanco *insertarArbol (struct arbolDeBanco *,struct cuentaHabiente);
 void mostrarArbol (struct arbolDeBanco *);
-struct arbolDeBanco *buscarArbol (struct arbolDeBanco *,struct cuentaHabiente);
+struct arbolDeBanco *buscarArbol (struct arbolDeBanco *,struct cuentaHabiente persona);
 int esHoja (struct arbolDeBanco *);
 struct arbolDeBanco *padreDe (struct arbolDeBanco *,struct cuentaHabiente);
-void consultarArbol (struct arbolDeBanco *,struct cuentaHabiente );
-struct arbolDeBanco *ElimiarCuenta(struct arbolDeBanco *,struct cuentaHabiente);
-int Vacio(struct arbolDeBanco *);
-
+void consultarArbol (struct arbolDeBanco *,struct cuentaHabiente);
+struct arbolDeBanco *mayorDe (struct arbolDeBanco *);
+struct arbolDeBanco *menorDe (struct arbolDeBanco *);
+struct arbolDeBanco *eliminarRaizDeArbol (struct arbolDeBanco *);
+struct arbolDeBanco *eliminarDeArbol (struct arbolDeBanco *, struct cuentaHabiente);
 
 #endif
