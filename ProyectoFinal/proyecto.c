@@ -1,4 +1,4 @@
-#include "proyecto.h"
+#include "arbol.h"
 
 struct arbolDeBanco *
 insertarArbol (struct arbolDeBanco *raiz, struct cuentaHabiente persona)
