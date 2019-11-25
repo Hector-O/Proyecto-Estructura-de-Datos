@@ -1,10 +1,10 @@
-a.out: main.o proyecto.o
-	gcc main.o proyecto.o
+a.out: main.o arbol.o
+	gcc main.o arbol.o
 main.o: main.c
 	gcc -c main.c
-proyecto.o: proyecto.c
-	gcc -c proyecto.c
+arbol.o: arbol.c
+	gcc -c arbol.c
 run: a.out
 	./a.out
 clear:
-	rm a.out main.o proyecto.o 
+	rm a.out main.o arbol.o 
