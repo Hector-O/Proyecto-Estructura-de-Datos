@@ -1,4 +1,4 @@
-#include"proyecto.h"
+#include "proyecto.h"
 
 struct arbolDeBanco *
 insertarArbol (struct arbolDeBanco *raiz, struct cuentaHabiente persona)
@@ -34,7 +34,14 @@ mostrarArbol (struct arbolDeBanco *raiz)
     {
       return;
     }
-  puts (raiz->persona.Nombre);
+
+  printf("Nombre:\n\t%s\n",raiz->persona.Nombre); 
+  printf("\nNo.Cuenta:\n\t%lld\n",raiz->persona.No_Cuenta);
+  printf("\nNIP:\n\t%d",raiz->persona.NIP);
+  printf("\nSucursal\n\t%d",raiz->persona.Sucursal);
+  printf("\nTipo de cuenta:\n\t%d",raiz->persona.T_Cuenta);
+  printf("\n-------------------------------------------------------------\n\n");
+  
   mostrarArbol (raiz->izq);
   mostrarArbol (raiz->der);
 }
@@ -71,10 +78,17 @@ buscarArbol (struct arbolDeBanco *raiz, struct cuentaHabiente persona)
     }
 }
 
+
 void
 consultarArbol (struct arbolDeBanco *raiz, struct cuentaHabiente persona)
 {
+
   struct arbolDeBanco *buscado = buscarArbol (raiz, persona);
+  if (buscado == NULL)
+    {
+      puts ("No se encontro elemento");
+      return;
+    }
   printf ("No de Sucursal: %d\t\t", buscado->persona.Sucursal);
   printf ("Tipo de cuenta: %d\n", buscado->persona.T_Cuenta);
 
@@ -84,6 +98,7 @@ consultarArbol (struct arbolDeBanco *raiz, struct cuentaHabiente persona)
   printf ("No. de cuenta: %lld\n", buscado->persona.No_Cuenta);
 
 }
+
 
 int
 esHoja (struct arbolDeBanco *raiz)
@@ -98,6 +113,7 @@ esHoja (struct arbolDeBanco *raiz)
     }
 
 }
+
 
 struct arbolDeBanco *
 padreDe (struct arbolDeBanco *raiz, struct cuentaHabiente persona)
@@ -144,6 +160,7 @@ padreDe (struct arbolDeBanco *raiz, struct cuentaHabiente persona)
 
 }
 
+
 struct arbolDeBanco *
 mayorDe (struct arbolDeBanco *raiz)
 {
@@ -165,6 +182,7 @@ mayorDe (struct arbolDeBanco *raiz)
   return mayor;
 }
 
+
 struct arbolDeBanco *
 menorDe (struct arbolDeBanco *raiz)
 {
@@ -185,6 +203,7 @@ menorDe (struct arbolDeBanco *raiz)
     }
   return menor;
 }
+
 
 struct arbolDeBanco *
 eliminarRaizDeArbol (struct arbolDeBanco *raiz)
@@ -302,7 +321,7 @@ eliminarDeArbol (struct arbolDeBanco *raiz, struct cuentaHabiente persona)
 
   if (raiz->persona.No_Cuenta == persona.No_Cuenta)
     {
-     return eliminarRaizDeArbol(raiz);
+      return eliminarRaizDeArbol (raiz);
     }
 
   struct arbolDeBanco *buscado = NULL;
@@ -312,18 +331,132 @@ eliminarDeArbol (struct arbolDeBanco *raiz, struct cuentaHabiente persona)
 
   struct arbolDeBanco *padreDeBuscado = NULL;
   padreDeBuscado = padreDe (raiz, buscado->persona);
-  if(padreDeBuscado == NULL)
+  if (padreDeBuscado == NULL)
     return NULL;
-  
+
   if (padreDeBuscado->persona.No_Cuenta > buscado->persona.No_Cuenta)
     {
-      padreDeBuscado->izq = eliminarRaizDeArbol(buscado);
+      padreDeBuscado->izq = eliminarRaizDeArbol (buscado);
       return raiz;
     }
 
   if (padreDeBuscado->persona.No_Cuenta < buscado->persona.No_Cuenta)
     {
-      padreDeBuscado->der = eliminarRaizDeArbol(buscado);
+      padreDeBuscado->der = eliminarRaizDeArbol (buscado);
       return raiz;
     }
+}
+
+
+int
+menu ()
+{
+  int identifica = 0;
+  printf ("\tIntroduza el numero para la accion que desea realizar\n");
+  printf ("1) Registrar nuevo cliente\n");
+  printf ("2) Consultar cliente\n");
+  printf ("3) Eliminar cliente\n");
+  printf ("4) Mostrar todos los usuarios\n");
+  printf ("0) Salir\n");
+
+  scanf ("%d", &identifica);
+
+  return identifica;
+
+}
+
+
+struct cuentaHabiente
+crearCH ()
+{
+  char cad[100] = "";
+  int NIP = 0;
+  int T_C = 0;
+  struct cuentaHabiente nuevo;
+
+  long long largo = generarNumValido ();
+
+  printf("Introduzca el Nombre\n\t");
+  //fflush (stdin);
+  vacia_buffer();
+  gets(nuevo.Nombre);
+  //fflush (stdin);
+  vacia_buffer();
+
+  printf("Introduzca NIP (4 digitos)\n\t");
+  scanf ("%d", &nuevo.NIP);
+
+  printf("Introduzca el tipo de cuenta (1-4)\n\t");
+  scanf ("%d", &nuevo.T_Cuenta);
+
+  nuevo.No_Cuenta = largo;
+  nuevo.Sucursal = 2;
+  
+  return nuevo;
+}
+
+
+long long
+generarNumValido ()
+{
+  long long num = 0;
+  srand (time (NULL));
+  num = (long long) rand ();
+  num = num * 305185094758;
+  num = llabs (num);
+
+  if (num == 0)
+    {
+      return generarNumValido ();
+    }
+  return num % 9999999999999999;
+
+}
+
+
+struct arbolDeBanco *
+buscarArbol_No_Cuenta (struct arbolDeBanco *raiz, long long No)
+{
+  if (raiz == NULL)
+    {
+      return NULL;
+    }
+  if (raiz->persona.No_Cuenta == No)
+    {
+      return raiz;
+    }
+
+  struct arbolDeBanco *buscado;
+
+  if (raiz->persona.No_Cuenta > No)
+    {
+      buscado = buscarArbol_No_Cuenta (raiz->izq, No);
+    }
+  else
+    {
+      buscado = buscarArbol_No_Cuenta (raiz->der, No);
+    }
+  if (buscado != NULL)
+    {
+      return buscado;
+    }
+  if (buscado == NULL)
+    {
+      return NULL;
+    }
+}
+
+int
+preguntar ()
+{
+  int entero;
+  printf("\n¿Desea hacer otra accion? (SI pon [1] / NO pon [0])\n");
+  scanf ("%d", &entero);
+  return entero;
+}
+
+void vacia_buffer()
+{
+  int ch;
+  while ((ch = getchar()) != '\n' && ch != EOF);
 }
