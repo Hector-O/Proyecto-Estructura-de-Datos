@@ -21,6 +21,10 @@ main ()
    {
       switch (i)
   {
+  case 0:
+    exit(1);
+    break;
+
   case 1:
     printf("\e[2J\e[H");
     aux = crearCH ();

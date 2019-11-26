@@ -216,6 +216,7 @@ eliminarRaizDeArbol (struct arbolDeBanco *raiz)
   if (esHoja (raiz))
     {
       free (raiz);
+      printf("\nEliminado...\n");
       return NULL;
     }
 
@@ -234,6 +235,7 @@ eliminarRaizDeArbol (struct arbolDeBanco *raiz)
       {
         mayor->der = raiz->der;
         free (raiz);
+        printf("\nEliminado...\n");
         return mayor;
       }
     else
@@ -242,6 +244,7 @@ eliminarRaizDeArbol (struct arbolDeBanco *raiz)
         mayor->izq = raiz->izq;
         mayor->der = raiz->der;
         free (raiz);
+        printf("\nEliminado...\n");
         return mayor;
       }
   }
@@ -251,6 +254,7 @@ eliminarRaizDeArbol (struct arbolDeBanco *raiz)
       {
         mayor->der = raiz->der;
         free (raiz);
+        printf("\nEliminado...\n");
         return mayor;
       }
     else
@@ -259,6 +263,7 @@ eliminarRaizDeArbol (struct arbolDeBanco *raiz)
         mayor->der = raiz->der;
         mayor->izq = raiz->izq;
         free (raiz);
+        printf("\nEliminado...\n");
         return mayor;
       }
   }
@@ -278,6 +283,7 @@ eliminarRaizDeArbol (struct arbolDeBanco *raiz)
       {
         menor->izq = raiz->izq;
         free (raiz);
+        printf("\nEliminado...\n");
         return menor;
       }
     else
@@ -286,6 +292,7 @@ eliminarRaizDeArbol (struct arbolDeBanco *raiz)
         menor->izq = raiz->izq;
         menor->der = raiz->der;
         free (raiz);
+        printf("\nEliminado...\n");
         return menor;
       }
   }
@@ -295,6 +302,7 @@ eliminarRaizDeArbol (struct arbolDeBanco *raiz)
       {
         menor->izq = raiz->izq;
         free (raiz);
+        printf("\nEliminado...\n");
         return menor;
       }
     else
@@ -303,6 +311,7 @@ eliminarRaizDeArbol (struct arbolDeBanco *raiz)
         menor->izq = raiz->izq;
         menor->der = raiz->der;
         free (raiz);
+        printf("\nEliminado...\n");
         return menor;
       }
   }
